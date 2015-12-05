@@ -1,0 +1,4 @@
+# Enable 32-bit lua code and libraries
+export PATH=/opt/lua32/root/usr/bin${PATH:+:${PATH}}
+export LD_LIBRARY_PATH=/opt/lua32/root/usr/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}
+export MANPATH=/opt/lua32/root/usr/share/man:${MANPATH}

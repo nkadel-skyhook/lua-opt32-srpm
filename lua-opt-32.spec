@@ -1,17 +1,18 @@
 # Start from lua base SRPM, tweak for alternative compilation
 
-%global _prefix /opt/lua-opt32/root/usr
+%global _prefix /opt/lua32
 %global srcname lua
 
 #Name:           lua
-Name:           lua-opt32
+Name:           opt-lua32
 Version:        5.1.4
-Release:        4.1%{?dist}
+Release:        0.4.1%{?dist}
 Summary:        Powerful light-weight programming language
 Group:          Development/Languages
 License:        MIT
 URL:            http://www.lua.org/
 Source0:        http://www.lua.org/ftp/%{srcname}-%{version}.tar.gz
+Source1:        enable
 Patch0:         lua-5.1.4-autotoolize.patch
 BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root-%(%{__id_u} -n)
 BuildRequires:  readline-devel ncurses-devel
@@ -20,7 +21,9 @@ Provides:       lua32 = 5.1
 BuildArch:	i686
 
 %description
-This is lua, repackaged for full 32 bit access in /opt
+This is 32-bit lua, repackaged for complete %{arch} access on x86_64 systems.
+Do not use it as a default: it interacts badly with RPM and other x86_64 utilities.
+Use "source %{_prefix}/enable" to enable it for specific workning environments.
 
 Lua is a powerful light-weight programming language designed for
 extending applications. Lua is also frequently used as a
@@ -75,6 +78,8 @@ rm $RPM_BUILD_ROOT%{_libdir}/*.la
 mkdir -p $RPM_BUILD_ROOT%{_libdir}/lua/5.1
 mkdir -p $RPM_BUILD_ROOT%{_datadir}/lua/5.1
 
+# Make enable script available
+%{__install} -m 0644 %{SOURCE1} $RPM_BUILD_ROOT%{_prefix}
 
 %clean
 rm -rf $RPM_BUILD_ROOT
@@ -90,7 +95,8 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_libdir}/lua/5.1
 %dir %{_datadir}/lua
 %dir %{_datadir}/lua/5.1
-
+# Enable 32-bit lua for default compilation
+%{_prefix}/enable
 
 %files devel
 %defattr(-,root,root,-)
@@ -104,8 +110,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_libdir}/*.a
 
 %changelog
-* Mon Nov 30 2009 Dennis Gregorovic <dgregor@redhat.com> - 5.1.4-4.1
+* Mon Nov 30 2009 Dennis Gregorovic <dgregor@redhat.com> - 5.1.4-0.4.1
 - Rebuilt for RHEL 6
+- Enforce 32-bit compilation
+- Add 'enable' script
 
 * Sat Jul 25 2009 Fedora Release Engineering <rel-eng@lists.fedoraproject.org> - 5.1.4-4
 - Rebuilt for https://fedoraproject.org/wiki/Fedora_12_Mass_Rebuild
