@@ -60,6 +60,7 @@ $(MOCKS):: verifyspec FORCE
 		     --resultdir=$(PWD)/$@ \
 		     $@.src.rpm; \
 	fi
+	rm -f $@.src.rpm
 
 mock:: $(MOCKS)
 
