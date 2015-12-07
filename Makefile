@@ -15,10 +15,15 @@ MOCKS+=epel-6-i386
 #MOCKS+=epel-5-x86_64
 #MOCKS+=epel-4-x86_64
 
-SPEC := `ls *.spec | head -1`
-PKGNAME := "`ls *.spec | head -1 | sed 's/.spec$$//g'`"
+SPEC := lua-opt32.spec
 
 all:: verifyspec $(MOCKS)
+
+
+tarball::
+	rm -f *.tar.gz
+	VERSION=`grep ^Version: $(SPEC) | awk '{print $$NF}'`; \
+	    wget http://www.lua.org/ftp/lua-$${VERSION}.tar.gz
 
 # Oddness to get deduced .spec file verified
 verifyspec:: FORCE
